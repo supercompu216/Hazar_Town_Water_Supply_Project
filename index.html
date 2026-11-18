@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hazara Town Water Project Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0c2238;--panel:rgba(255,255,255,.84);--panel2:rgba(255,255,255,.6);--line:rgba(12,34,56,.16);--mut:#46607a;--veil:rgba(235,244,252,.55);--acc:#0a7cc2;--c1:#0a7cc2;--c2:#d9822b;--c3:#1f9d6b;--c4:#c8383f;--hi:rgba(217,130,43,.25);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8f1fa;--panel:rgba(10,24,40,.82);--panel2:rgba(10,24,40,.6);--line:rgba(200,225,250,.2);--mut:#9db6cc;--veil:rgba(4,12,22,.7);--hi:rgba(217,130,43,.35)}}
+:root[data-theme="dark"]{--ink:#e8f1fa;--panel:rgba(10,24,40,.82);--panel2:rgba(10,24,40,.6);--line:rgba(200,225,250,.2);--mut:#9db6cc;--veil:rgba(4,12,22,.7);--hi:rgba(217,130,43,.35)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Manrope,system-ui,sans-serif;color:var(--ink);background:#1b2a38 url(assets/background.jpg) center/cover fixed;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;background:var(--veil);z-index:0}
+.wrap{position:relative;z-index:1;max-width:1150px;margin:0 auto;padding:18px 16px 110px}
+header{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
+h1{font-size:clamp(1.5rem,4vw,2.2rem);margin:0;font-weight:800;letter-spacing:-.02em}
+.ur{font-family:"Noto Naskh Arabic",serif;direction:rtl;text-align:right}
+header .ur{font-size:1.2rem;line-height:1.9;color:var(--mut);margin:4px 0 0;text-align:left;direction:rtl}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;color:var(--ink)}
+.btn{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:600;backdrop-filter:blur(8px)}
+.btn.pri{background:var(--acc);color:#fff;border-color:transparent}
+.btn:focus-visible,.sw:focus-visible,.mic:focus-visible,.pp:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.k{border-radius:16px;padding:16px 18px;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.22)}
+.k small{opacity:.92;font-weight:600}.k b{display:block;font-size:1.3rem;margin:6px 0 2px;font-weight:800}.k span{font-size:.88rem;opacity:.93}
+.k:nth-child(1){background:var(--c1)}.k:nth-child(2){background:var(--c2)}.k:nth-child(3){background:var(--c3)}.k:nth-child(4){background:var(--c4)}
+.cols{grid-template-columns:1.5fr 1fr;margin-top:14px;align-items:start}
+@media(max-width:850px){.cols{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;backdrop-filter:blur(10px)}
+h2{font-size:1.05rem;margin:0 0 12px;font-weight:800}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;position:sticky;top:0;padding:8px 0;background:var(--panel);z-index:2;border-bottom:1px solid var(--line)}
+.ctl label{font-size:.82rem;color:var(--mut);display:flex;gap:6px;align-items:center}
+.ctl select{font:inherit;max-width:190px;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--ink)}
+#art{max-height:68vh;overflow:auto;padding-inline:4px}
+#art p{font-family:"Noto Naskh Arabic",serif;direction:rtl;text-align:right;font-size:1.22rem;line-height:2.15;margin:0 0 10px;padding:6px 12px 6px 8px;border-right:5px solid var(--line);border-radius:6px;position:relative}
+#art p.title{font-weight:700;font-size:1.35rem;border-right-color:var(--c1)}
+#art p.on{background:var(--hi);border-right-color:var(--c2)}
+.pp{position:absolute;left:6px;top:6px;border:1px solid var(--line);background:var(--panel2);border-radius:99px;width:30px;height:30px;font-size:.8rem}
+.tl{list-style:none;margin:0;padding:0 0 0 18px;border-left:3px solid var(--acc)}
+.tl li{position:relative;margin:0 0 13px;padding-left:10px;line-height:1.45;font-size:.93rem}
+.tl li::before{content:"";position:absolute;left:-26px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--c2);border:2px solid var(--panel)}
+.tl li:last-child::before{background:var(--c3)}.tl em{display:block;font-style:normal;font-weight:700}
+.stk{display:flex;flex-direction:column;gap:9px}
+.stk div{border-left:5px solid var(--c1);background:var(--panel2);padding:8px 12px;border-radius:8px;line-height:1.4;font-size:.9rem}
+.stk div:nth-child(2){border-color:var(--c2)}.stk div:nth-child(3){border-color:var(--c3)}.stk div:nth-child(4){border-color:var(--c4)}.stk b{display:block}
+.side{display:flex;flex-direction:column;gap:14px}
+.note{color:var(--mut);font-size:.82rem;margin:8px 0 0}
+.dock{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:10px;max-width:calc(100vw - 32px)}
+.mic{width:60px;height:60px;border-radius:50%;border:0;background:var(--acc);color:#fff;font-size:1.6rem;box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.mic.on{background:var(--c4);animation:p 1.1s infinite}
+@keyframes p{50%{box-shadow:0 0 0 14px rgba(200,56,63,.25)}}
+@media(prefers-reduced-motion:reduce){.mic.on{animation:none}}
+.va{width:330px;max-width:100%;display:none}.va.open{display:block}
+.va .log{max-height:140px;overflow:auto;font-size:.88rem;line-height:1.5;margin:8px 0}.va .log p{margin:0 0 5px}
+.va .hint{font-size:.8rem;color:var(--mut);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+ <div>
+  <h1>Hazara Town Water Supply Project</h1>
+  <p class="ur">ہزارہ ٹاؤن کو پانی کی فراہمی کا منصوبہ تکمیل کے آخری مراحل میں</p>
+ </div>
+ <div class="tools" role="group" aria-label="Appearance">
+  <button class="sw" style="background:#0a7cc2" data-c="#0a7cc2" aria-label="Blue accent"></button>
+  <button class="sw" style="background:#d9822b" data-c="#d9822b" aria-label="Amber accent"></button>
+  <button class="sw" style="background:#1f9d6b" data-c="#1f9d6b" aria-label="Green accent"></button>
+  <button class="sw" style="background:#c8383f" data-c="#c8383f" aria-label="Red accent"></button>
+  <button class="sw" style="background:#7a4fd0" data-c="#7a4fd0" aria-label="Purple accent"></button>
+  <button class="btn" id="theme" aria-label="Switch theme">🌙 Dark</button>
+ </div>
+</header>
+
+<section class="grid kpis" aria-label="Key figures">
+ <div class="k"><small>Project status</small><b>Final stages</b><span>Nearing completion</span></div>
+ <div class="k"><small>Court oversight</small><b>Balochistan High Court</b><span>Continuous monitoring</span></div>
+ <div class="k"><small>Water source</small><b>Sajawal Abad</b><span>To Hazara Town &amp; nearby areas</span></div>
+ <div class="k"><small>Road closure</small><b>Western Bypass</b><span>Blocked for several hours</span></div>
+</section>
+
+<div class="grid cols">
+ <section class="card" aria-label="Full article">
+  <h2>Full article (اردو)</h2>
+  <div class="ctl">
+   <button class="btn pri" id="readAll">▶ Read all</button>
+   <button class="btn" id="pause">⏸ Pause</button>
+   <button class="btn" id="stop">⏹ Stop</button>
+   <label>Speed <input type="range" id="rate" min="0.6" max="1.4" step="0.1" value="0.9"></label>
+   <label>Voice <select id="voice" aria-label="Voice"></select></label>
+  </div>
+  <div id="art">
+<p class="title">ہزارہ ٹاؤن کو پانی کی فراہمی کا منصوبہ تکمیل کے آخری مراحل میں داخل، عدالت عالیہ بلوچستان کی مسلسل نگرانی اور واسا حکام کی کوششیں رنگ لانے لگیں، سیاسی پوائنٹ اسکورنگ اور سڑکوں کی بندش پر سوالات اٹھنے لگے</p>
+<p>کوئٹہ ہزارہ ٹاؤن اور ملحقہ علاقوں کو سجاول آباد سے پانی کی فراہمی کا اہم منصوبہ طویل قانونی و انتظامی پیچیدگیوں کے بعد بالآخر تکمیل کے آخری مراحل میں داخل ہو گیا ہے۔ عدالت عالیہ بلوچستان کی مسلسل نگرانی، طویل سماعتوں اور قانونی رکاوٹوں کے خاتمے کے لیے جاری کوششوں اور واسا حکام کی کاوشوں کے نتیجے میں اس منصوبے پر عملی پیش رفت سامنے آ رہی ہے، جسے ہزارہ ٹاؤن کے مکینوں کے لیے ایک بڑی خوشخبری قرار دیا جا رہا ہے۔ علاقے کے شہری طویل عرصے سے پانی کی شدید قلت کا سامنا کر رہے ہیں۔</p>
+<p>اس اہم منصوبے کی تکمیل کے حوالے سے عدالت عالیہ بلوچستان کے موجودہ اور سابق چیف جسٹس صاحبان سمیت معزز ججز اور واسا حکام کا کردار قابلِ ذکر ہے، جنہوں نے مقدمے کے مختلف قانونی اور انتظامی پہلوؤں کا تفصیلی جائزہ لیا اور واسا حکام کی فراہم کی گئی معلومات پر زمین کے تنازعے کے حل کے لیے ضروری احکامات جاری کیے اور واسا حکام اور دیگر متعلقہ اداروں کو منصوبے پر پیش رفت، ٹیوب ویلز کی فعالیت اور متاثرہ علاقوں میں پانی کی فراہمی یقینی بنانے کی ہدایات دیں۔</p>
+<p>مذکورہ منصوبہ ہزارہ ڈیموکریٹک پارٹی کے دورِ حکومت میں رکن صوبائی اسمبلی قادر نائل کے فنڈز سے منظور کیا گیا تھا۔ تاہم، مختلف ادوار میں بعض سیاسی شخصیات اور جماعتوں کی جانب سے اس منصوبے کا سیاسی کریڈٹ حاصل کرنے کی کوششوں کے حوالے سے بھی مختلف دعوے سامنے آتے رہے ہیں۔</p>
+<p>حالیہ دنوں میں نیشنل پارٹی سے وابستہ رمضان ہزارہ کی جانب سے بھی اس معاملے پر سیاسی سرگرمیوں میں تیزی دیکھنے میں آئی۔ گزشتہ روز انہوں نے سینکڑوں افراد کے ہمراہ مغربی بائی پاس بند کرکے احتجاج کیا، جس کے باعث کئی گھنٹوں تک مسافروں، ٹرانسپورٹرز اور مال بردار گاڑیوں کو شدید مشکلات اور پریشانی کا سامنا کرنا پڑا۔</p>
+<p>یہ احتجاج ایسے وقت میں کیا گیا جب عدالت عالیہ بلوچستان کی مسلسل نگرانی اور واسا حکام کی کوششوں کے نتیجے میں منصوبہ تکمیل کے قریب پہنچ چکا ہے۔ ایسے حالات میں اہم شاہراہ کی بندش اور احتجاجی سیاست نے کئی اہم سوالات کو جنم دیا ہے۔ بالخصوص یہ سوال اپنی جگہ اہمیت رکھتا ہے کہ جب معاملہ عدالت عالیہ میں زیرِ سماعت ہو اور متعلقہ ادارے عدالتی احکامات کی روشنی میں منصوبے پر پیش رفت کر رہے ہوں تو عوامی شاہراہوں کی بندش اور شہریوں کو مشکلات سے دوچار کرنے کا جواز کیا ہے؟</p>
+<p>واضح رہے کہ رمضان ہزارہ اس سے قبل بھی چند ماہ پہلے احتجاج اور سڑک بند کرنے کی دھمکی دے چکے ہیں، جس کے بعد انہیں تین ایم پی او کے تحت گرفتار کیا گیا تھا۔ دوسری جانب واسا کے اعلیٰ حکام کے خلاف مبینہ منفی پروپیگنڈے اور منصوبے کے کریڈٹ کے حوالے سے بھی مختلف بیانات اور دعوے سامنے آ رہے ہیں۔ بعض حلقوں کی جانب سے حالیہ احتجاج کو ذاتی یا سیاسی اختلافات کا نتیجہ بھی قرار دیا جا رہا ہے، تاہم اس حوالے سے کسی بھی حتمی رائے کے لیے تمام متعلقہ فریقین کا مؤقف سامنے آنا ضروری ہے۔</p>
+<p>قابلِ ذکر امر یہ ہے کہ گزشتہ روز احتجاج کے بعد عدالت عالیہ بلوچستان میں مقدمے کی سماعت بھی ہوئی، جہاں اطلاعات کے مطابق سڑکوں کی بندش اور احتجاج کے معاملے پر عدالت نے سخت برہمی کا اظہار کیا۔ عدالت نے ریمارکس دیے کہ اگر معاملہ احتجاج اور سڑکیں بند کرنے سے حل ہونا تھا تو عدالت سے رجوع کرنے کی ضرورت ہی کیوں پیش آئی؟ عدالت میں مقدمہ زیرِ سماعت ہونے کے دوران احتجاج کا راستہ اختیار کرنا مناسب طرزِ عمل نہیں تھا۔</p>
+<p>دوسری جانب ہزارہ ڈیموکریٹک پارٹی کی قیادت نے منصوبے کی اہمیت اور معاملے کی حساسیت کو مدنظر رکھتے ہوئے قانونی اور انتظامی امور عدالت عالیہ بلوچستان اور واسا حکام پر چھوڑ رکھے ہیں اور عدالتی کارروائی کے نتیجے میں سامنے آنے والے فیصلے کی منتظر ہے۔</p>
+<p>اس پورے معاملے میں بنیادی اہمیت سیاسی کریڈٹ، جماعتی اختلافات یا شخصی تشہیر کی نہیں بلکہ ہزارہ ٹاؤن اور ملحقہ علاقوں کے ہزاروں مکینوں کو صاف پانی کی مستقل اور بلاتعطل فراہمی کی ہے۔ یہ ایک بنیادی عوامی ضرورت ہے، جسے سیاسی اختلافات اور ذاتی مفادات سے بالاتر ہو کر ترجیح دی جانی چاہیے۔</p>
+<p>اگر عدالت عالیہ بلوچستان کی نگرانی اور واسا حکام کی عملی کوششیں اسی تسلسل کے ساتھ جاری رہیں تو برسوں سے پانی کی قلت کا شکار شہریوں کا دیرینہ مسئلہ حل ہونے کی قوی امید ہے۔ اب وقت کا تقاضا ہے کہ تمام سیاسی و سماجی حلقے ذمہ داری کا مظاہرہ کریں، عدالتی عمل اور متعلقہ اداروں کے کام میں رکاوٹ ڈالنے کے بجائے تعاون کریں اور منصوبے کی جلد تکمیل کو یقینی بنانے میں اپنا مثبت کردار ادا کریں، تاکہ اس منصوبے کے ثمرات بلا تاخیر عوام تک پہنچ سکیں۔</p>
+  </div>
+  <p class="note" id="vnote">Tap ▶ on any paragraph to hear just that one.</p>
+ </section>
+
+ <div class="side">
+  <section class="card">
+   <h2>Timeline</h2>
+   <ol class="tl">
+    <li><em>Project approved</em>Under the Hazara Democratic Party government, from MPA Qadir Nayel’s funds.</li>
+    <li><em>Legal hurdles</em>Long hearings; court orders on the land dispute, tube wells and supply.</li>
+    <li><em>Protest</em>Rozan Hazara (National Party) blocks the Western Bypass for hours.</li>
+    <li><em>Next-day hearing</em>Court reportedly voices strong displeasure at the blockade.</li>
+    <li><em>Ahead</em>Completion and the court’s decision are awaited.</li>
+   </ol>
+  </section>
+  <section class="card">
+   <h2>Who is involved</h2>
+   <div class="stk">
+    <div><b>Balochistan High Court</b>Monitors the case and directs progress.</div>
+    <div><b>WASA Quetta</b>Executes the project and tube wells.</div>
+    <div><b>Hazara Democratic Party</b>Leaves legal matters to court and WASA.</div>
+    <div><b>Rozan Hazara</b>Led the protest; earlier held under 3 MPO.</div>
+   </div>
+   <p class="note">The article says all sides’ views are needed before any final judgment on the protest.</p>
+  </section>
+ </div>
+</div>
+</div>
+
+<div class="dock">
+ <section class="card va" id="va" aria-label="Voice assistant">
+  <h2>Voice assistant</h2>
+  <div class="hint">Say (اردو or English): “read all” / “پڑھیں”, “stop” / “رکو”, “pause”, “resume”, “dark”, “light”, or a color: blue, green, red, amber, purple (نیلا، سبز، سرخ، نارنجی، جامنی).</div>
+  <div class="log" id="log" aria-live="polite"></div>
+ </section>
+ <button class="mic" id="mic" aria-label="Voice assistant: tap and speak">🎤</button>
+</div>
+
+<script>
+(function(){
+var R=document.documentElement,$=function(i){return document.getElementById(i)};
+var dark=matchMedia('(prefers-color-scheme: dark)').matches;
+function setTheme(d){dark=d;R.setAttribute('data-theme',d?'dark':'light');$('theme').textContent=d?'☀️ Light':'🌙 Dark'}
+setTheme(dark);$('theme').onclick=function(){setTheme(!dark)};
+function setAcc(c){R.style.setProperty('--acc',c);R.style.setProperty('--c1',c)}
+document.querySelectorAll('.sw').forEach(function(b){b.onclick=function(){setAcc(b.dataset.c)}});
+
+/* Text-to-speech of the full article */
+var paras=[].slice.call(document.querySelectorAll('#art p')),ss=window.speechSynthesis,tok=0,paused=false;
+paras.forEach(function(p,i){var b=document.createElement('button');b.className='pp';b.textContent='▶';b.setAttribute('aria-label','Read paragraph '+(i+1));b.onclick=function(){start(i,i)};p.appendChild(b)});
+function voices(){return ss?ss.getVoices():[]}
+function fillVoices(){
+ var v=voices(),s=$('voice');if(!v.length)return;s.innerHTML='';
+ var pick=-1;v.forEach(function(x,i){var o=document.createElement('option');o.value=i;o.textContent=x.name+' ('+x.lang+')';s.appendChild(o);
+  var l=x.lang.toLowerCase();if(pick<0&&l.indexOf('ur')===0)pick=i});
+ var urd=pick>=0;
+ if(!urd){v.forEach(function(x,i){var l=x.lang.toLowerCase();if(pick<0&&(l.indexOf('hi')===0||l.indexOf('ar')===0))pick=i})}
+ if(pick>=0)s.value=pick;
+ $('vnote').textContent=urd?'Urdu voice found. Tap ▶ on any paragraph to hear just that one.':'No Urdu voice on this device, so a Hindi/Arabic voice is used and may sound off. Install an Urdu voice in your system settings for best results.';
+}
+if(ss){fillVoices();ss.onvoiceschanged=fillVoices}else{$('vnote').textContent='Speech output isn’t supported in this browser.'}
+function sentences(t){return t.replace(/▶/g,'').split(/(?<=[۔؟?])\s+/).filter(function(x){return x.trim()})}
+function start(from,to){
+ if(!ss){say('Speech output isn’t supported in this browser.');return}
+ ss.cancel();paused=false;var my=++tok,i=from;
+ function next(){
+  if(my!==tok||i>to){clear();return}
+  var p=paras[i];clear();p.classList.add('on');p.scrollIntoView({block:'nearest',behavior:'smooth'});
+  var q=sentences(p.firstChild.textContent),j=0;
+  (function s(){
+   if(my!==tok)return;if(j>=q.length){i++;next();return}
+   var u=new SpeechSynthesisUtterance(q[j++]);var v=voices()[$('voice').value];
+   if(v){u.voice=v;u.lang=v.lang}else u.lang='ur-PK';u.rate=+$('rate').value;
+   u.onend=s;u.onerror=function(e){if(e.error!=='canceled'&&e.error!=='interrupted')s()};ss.speak(u)})();
+ }
+ next()}
+function clear(){paras.forEach(function(p){p.classList.remove('on')})}
+function stop(){tok++;if(ss)ss.cancel();paused=false;clear();$('pause').textContent='⏸ Pause'}
+function pause(){if(!ss)return;if(paused){ss.resume();paused=false;$('pause').textContent='⏸ Pause'}else{ss.pause();paused=true;$('pause').textContent='▶ Resume'}}
+$('readAll').onclick=function(){start(0,paras.length-1)};$('stop').onclick=stop;$('pause').onclick=pause;
+
+/* Voice assistant */
+var log=$('log');function say(t){var p=document.createElement('p');p.textContent=t;log.appendChild(p);log.scrollTop=log.scrollHeight}
+var names={blue:'#0a7cc2',نیلا:'#0a7cc2',amber:'#d9822b',orange:'#d9822b',نارنجی:'#d9822b',green:'#1f9d6b',سبز:'#1f9d6b',red:'#c8383f',سرخ:'#c8383f',لال:'#c8383f',purple:'#7a4fd0',جامنی:'#7a4fd0'};
+function command(t){
+ var l=t.toLowerCase();say('“'+t+'”');
+ if(/read|play|start|پڑھ|سن|شروع/.test(l)){start(0,paras.length-1);say('Reading the full article.')}
+ else if(/stop|بند|رک/.test(l)){stop();say('Stopped.')}
+ else if(/pause|وقفہ|ٹھہر/.test(l)){if(!paused)pause();say('Paused.')}
+ else if(/resume|continue|جاری/.test(l)){if(paused)pause();say('Resumed.')}
+ else if(/dark|ڈارک|اندھیرا/.test(l)){setTheme(true);say('Dark theme.')}
+ else if(/light|لائٹ|روشن/.test(l)){setTheme(false);say('Light theme.')}
+ else{var c=null;for(var n in names){if(l.indexOf(n)>-1)c=names[n]}
+  if(c){setAcc(c);say('Color changed.')}else say('Try: read all, stop, pause, dark, light, or a color name.')}
+}
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,on=false;
+$('mic').onclick=function(){
+ $('va').classList.add('open');
+ if(!SR){say('Voice input isn’t supported in this browser. Use the buttons instead.');return}
+ if(on){rec.stop();return}
+ if(ss&&ss.speaking&&!paused)ss.pause();
+ rec=new SR();rec.lang='ur-PK';rec.interimResults=false;
+ rec.onstart=function(){on=true;$('mic').classList.add('on')};
+ rec.onend=function(){on=false;$('mic').classList.remove('on');if(ss&&ss.paused&&!paused)ss.resume()};
+ rec.onerror=function(e){say('Mic error: '+e.error)};
+ rec.onresult=function(e){command(e.results[0][0].transcript)};
+ try{rec.start()}catch(x){}
+};
+})();
+</script>
+</body>
+</html>
